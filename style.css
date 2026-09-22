@@ -1,0 +1,46 @@
+/* style.css */
+html {
+    scroll-behavior: smooth;
+    cursor: none; /* Hide default cursor to use our custom one */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Cursor hover states */
+a:hover ~ #cursor, 
+button:hover ~ #cursor {
+    transform: scale(3);
+    background-color: #EBA834;
+    border-radius: 0;
+}
+
+/* Custom sharp scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #F4F1EA;
+    border-left: 2px solid #1A1C20;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1A1C20;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #D83121;
+}
+
+/* Layout Utilities */
+.horizontal-scroll-container {
+    /* Set up for JS scroll linking */
+    will-change: transform;
+}
