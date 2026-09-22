@@ -240,14 +240,16 @@
 
     <!-- Extensive Achievements & Figures (Horizontal Scroll) -->
     <section id="achievements" class="bg-ink/95 backdrop-blur-md text-cream relative h-[400vh] z-30">
-        <div class="sticky top-0 h-screen flex flex-col justify-start overflow-hidden pt-20 pb-4">
-            <div class="px-8 md:px-24 mb-2 relative z-10">
-                <h2 class="text-3xl md:text-5xl lg:text-6xl font-display font-bold uppercase text-ochre section-title">By The Numbers</h2>
-                <p class="text-sm md:text-base mt-1 max-w-2xl text-cream/70">A history of obsessive curiosity, extreme competitiveness, and massive scale impact.</p>
+        <!-- The Sticky Container (Only sticky on desktop) -->
+        <div class="relative md:sticky top-0 h-auto md:h-screen flex flex-col justify-start overflow-visible md:overflow-hidden pt-20 pb-20 md:pb-0">
+            <!-- Header for horizontal section -->
+            <div class="px-8 md:px-24 mb-8 md:mb-12 flex-shrink-0 relative z-10">
+                <h2 class="text-4xl md:text-7xl font-display font-bold uppercase text-ink/20 absolute -top-8 md:-top-12 -left-4 md:-left-8 z-0 w-full whitespace-nowrap overflow-hidden">Metrics</h2>
+                <h2 class="text-4xl md:text-6xl font-display font-bold uppercase relative z-10">By The Numbers</h2>
             </div>
 
-            <!-- Horizontal Scrolling Track -->
-            <div id="horizontal-track" class="flex gap-4 px-8 md:px-24 w-max relative z-10 items-start">
+            <!-- Horizontal Scrolling Track (Vertical on mobile) -->
+            <div id="horizontal-track" class="flex flex-col md:flex-row gap-6 md:gap-4 px-8 md:px-24 w-full md:w-max relative z-10 items-start">
                 
                 <!-- Card 1 -->
                 <div class="w-[85vw] md:w-[45vw] flex-shrink-0 bg-cream text-ink p-5 md:p-6 border-4 border-vermilion relative group snap-center">
@@ -443,7 +445,7 @@
             });
 
             const img = document.createElement('img');
-            img.src = 'Photos/' + encodeURIComponent(name);
+            img.src = encodeURIComponent(name); // Removed 'Photos/' prefix so it works perfectly in the root folder on GitHub!
             img.alt = 'Field photo ' + (i + 1);
             img.style.cssText = 'width:100%; height:auto; display:block; pointer-events:none;';
             img.loading = 'lazy';
@@ -456,7 +458,8 @@
         const container = document.getElementById('gallery-container');
 
         let panX = 0, panY = 0, targetPanX = 0, targetPanY = 0;
-        let zoom = 0.55, targetZoom = 0.55;   // ~3-4 photos visible at once
+        let zoom = window.innerWidth < 768 ? 0.35 : 0.55;
+        let targetZoom = window.innerWidth < 768 ? 0.35 : 0.55;
         let isDragging = false;
         let startMX, startMY, startPX, startPY;
 
@@ -704,15 +707,27 @@
         const achievementsSection = document.getElementById("achievements");
         const horizontalTrack = document.getElementById("horizontal-track");
         const horizontalProgress = document.getElementById("horizontal-progress");
+        let currentScroll = null;
+        let currentProgress = null;
+
         if (achievementsSection && horizontalTrack) {
             const updateScroll = () => {
+                if (window.innerWidth < 768) {
+                    // Mobile: natural vertical stack, disable motion.dev scroll
+                    if(currentScroll) currentScroll(); // cancel previous if any (motion.dev scroll returns cancel fn)
+                    if(currentProgress) currentProgress();
+                    horizontalTrack.style.transform = "none";
+                    return;
+                }
+
+                // Desktop: horizontal pin scroll
                 const scrollDistance = horizontalTrack.scrollWidth - window.innerWidth + 200;
-                scroll(
+                currentScroll = scroll(
                     animate(horizontalTrack, { x: ["0px", `-${scrollDistance}px`] }),
                     { target: achievementsSection, offset: ["start start", "end end"] }
                 );
                 if (horizontalProgress) {
-                    scroll(
+                    currentProgress = scroll(
                         animate(horizontalProgress, { scaleX: [0, 1] }),
                         { target: achievementsSection, offset: ["start start", "end end"] }
                     );
@@ -747,16 +762,21 @@
                         // Add smooth transition for color
                         span.className = 'transition-colors duration-500 ease-out inline-block';
                         
-                        span.addEventListener('mouseenter', () => {
+                        const triggerColor = () => {
                             const randomColor = colors[Math.floor(Math.random() * colors.length)];
                             span.style.color = randomColor;
-                            span.style.transitionDuration = '0s'; // instant color change on enter
-                        });
-                        
-                        span.addEventListener('mouseleave', () => {
-                            span.style.transitionDuration = '1s'; // slow fade back on leave
+                            span.style.transitionDuration = '0s'; // instant color change
+                        };
+                        const resetColor = () => {
+                            span.style.transitionDuration = '1s'; // slow fade back
                             span.style.color = '';
-                        });
+                        };
+
+                        span.addEventListener('mouseenter', triggerColor);
+                        span.addEventListener('touchstart', triggerColor, { passive: true });
+                        
+                        span.addEventListener('mouseleave', resetColor);
+                        span.addEventListener('touchend', resetColor, { passive: true });
                         
                         lineDiv.appendChild(span);
                     }
