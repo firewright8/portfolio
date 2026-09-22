@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akhil Sreekumar | Public Policy, Operations & Governance</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts for sharp, editorial typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Space Grotesk', 'sans-serif'],
+                        display: ['Syne', 'sans-serif'],
+                    },
+                    colors: {
+                        cream: '#F4F1EA',
+                        ink: '#1A1C20',
+                        vermilion: '#D83121', // Energy & Highlights
+                        ochre: '#EBA834',    // Curiosity
+                        prussian: '#1D3B55'  // Leadership & Trust
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-cream text-ink overflow-x-hidden selection:bg-vermilion selection:text-cream cursor-none">
+    
+    <!-- Three.js Background -->
+    <canvas id="webgl-canvas" class="fixed top-0 left-0 w-full h-full z-0 pointer-events-none"></canvas>
+
+    <!-- Custom Sharp Precision Cursor -->
+    <div id="cursor" class="fixed top-0 left-0 w-2 h-2 bg-vermilion pointer-events-none mix-blend-difference z-[9999] transition-transform duration-100 ease-out origin-center hidden md:block"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
+    <!-- Simplex Noise for Fractal Topography -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplex-noise/2.4.0/simplex-noise.min.js"></script>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 px-8 py-6 flex justify-between items-center mix-blend-difference text-cream">
+        <div class="text-xl md:text-2xl font-display font-bold uppercase tracking-tight">AKHIL SREEKUMAR</div>
+        <div class="space-x-8 text-sm font-bold uppercase tracking-widest hidden md:block">
+            <a href="#about" class="hover:text-vermilion transition-colors">Manifesto</a>
+            <a href="#experience" class="hover:text-vermilion transition-colors">Experience</a>
+            <a href="#achievements" class="hover:text-vermilion transition-colors">Achievements</a>
+            <a href="#contact" class="hover:text-vermilion transition-colors">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative min-h-screen flex flex-col justify-end pb-24 px-8 md:px-24 pt-32">
+        <div class="hero-content z-10 max-w-6xl w-full">
+            <p class="font-bold uppercase tracking-widest text-prussian mb-6 text-sm flex items-center gap-4">
+                <span class="w-12 h-[2px] bg-prussian block"></span> Public Policy, Operations & Development Policy
+            </p>
+            <!-- Interactive Letter Hover Text -->
+            <div class="relative w-full h-auto cursor-crosshair group hero-title mt-4">
+                <h1 class="hero-title-text text-[13vw] md:text-[9vw] lg:text-[8vw] font-display font-extrabold leading-[0.8] tracking-tighter uppercase text-ink whitespace-nowrap flex flex-col w-full text-left md:text-justify">
+                    Akhil<br/>Sreekumar
+                </h1>
+            </div>
+            <p class="mt-12 text-2xl md:text-4xl max-w-4xl leading-snug font-light hero-desc">
+                Driving high-impact structural change from the grassroots to the highest echelons of state and central governance.
+            </p>
+            <div class="mt-16 flex flex-col sm:flex-row gap-6 relative z-50">
+                <a href="CV_Akhil Sreekumar.pdf" download class="px-8 py-4 bg-ink text-cream font-bold uppercase tracking-widest hover:bg-vermilion transition-colors duration-300 text-center w-full sm:w-auto">
+                    Download CV
+                </a>
+                <a href="#contact" class="px-8 py-4 border-2 border-ink text-ink font-bold uppercase tracking-widest hover:bg-ink hover:text-cream transition-colors duration-300 text-center w-full sm:w-auto">
+                    Get in Touch
+                </a>
+            </div>
+        </div>
+        <div class="absolute top-0 right-0 w-1/2 h-full bg-ochre/10 -z-10 origin-right scale-x-0 hero-bg-panel pointer-events-none"></div>
+    </section>
+
+    <!-- Executive Summary (The 10-Second Pitch) -->
+    <section id="exec-summary" class="py-16 px-8 md:px-24 bg-prussian/95 backdrop-blur-md text-cream relative z-10 border-b border-cream/10">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-12 items-center">
+            <div class="w-full lg:w-1/3">
+                <h2 class="text-3xl md:text-5xl font-display font-bold uppercase text-ochre leading-tight">Executive<br/>Summary</h2>
+                <p class="text-cream/60 mt-4 font-light text-sm uppercase tracking-widest">The 10-Second Pitch</p>
+            </div>
+            <div class="w-full lg:w-2/3 grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="border-l-2 border-vermilion pl-6">
+                    <div class="font-display text-2xl font-bold mb-2">Scale</div>
+                    <p class="text-cream/80 text-sm font-light">Managed <strong>₹530Cr+</strong> portfolios across <strong>250+</strong> concurrent governance projects.</p>
+                </div>
+                <div class="border-l-2 border-vermilion pl-6">
+                    <div class="font-display text-2xl font-bold mb-2">Impact</div>
+                    <p class="text-cream/80 text-sm font-light">Directly elevated livelihoods for <strong>10,000+ youth</strong> and <strong>1,300+ women</strong> in volatile geographies.</p>
+                </div>
+                <div class="border-l-2 border-vermilion pl-6">
+                    <div class="font-display text-2xl font-bold mb-2">Rigor</div>
+                    <p class="text-cream/80 text-sm font-light">Dual background in Mechanical Engineering (<strong>8.6 CGPA</strong>) and advanced public policy strategy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Manifesto / Skills -->
+    <section id="about" class="py-24 px-8 md:px-24 bg-prussian/95 backdrop-blur-md text-cream relative z-10 overflow-hidden group">
+        <!-- Fractal Topography Canvas -->
+        <canvas id="topo-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-0"></canvas>
+        
+        <div class="max-w-7xl mx-auto relative z-10">
+            <h2 class="text-4xl md:text-7xl font-display font-bold uppercase mb-20 section-title opacity-0 translate-y-12">The Skillset</h2>
+            <div class="flex md:grid overflow-x-auto md:overflow-x-visible snap-x snap-mandatory hide-scrollbar md:grid-cols-2 lg:grid-cols-3 gap-12 border-t border-cream/20 pt-16 pb-6 md:pb-0">
+                <!-- Skill 1 -->
+                <div class="skill-card opacity-100 md:opacity-0 min-w-[85vw] md:min-w-0 snap-center pr-6 md:pr-0">
+                    <div class="text-ochre font-display text-2xl font-bold mb-4">01. Operations in Tough Geographies</div>
+                    <p class="text-cream/80 leading-relaxed font-light">Proven success driving community development in <strong class="text-white">LWE and mining-affected regions (Dantewada, Raigarh)</strong>. Entrusted with high-stakes <strong class="text-white">District Disaster Management</strong>, and designed & implemented <strong class="text-white">Youth Hubs</strong> and the <strong class="text-white">Mahila Lakhpati Mission.</strong></p>
+                </div>
+                <!-- Skill 2 -->
+                <div class="skill-card opacity-100 md:opacity-0 min-w-[85vw] md:min-w-0 snap-center pr-6 md:pr-0">
+                    <div class="text-ochre font-display text-2xl font-bold mb-4">02. Tech & Engineering</div>
+                    <p class="text-cream/80 leading-relaxed font-light"><strong class="text-white">B.Tech (Hons)</strong> in <strong class="text-white">Mechanical Engineering (8.6 CGPA)</strong> and <strong class="text-white">TCS Systems Engineering</strong> background. Bridging <strong class="text-white">complex operations</strong> with <strong class="text-white">digital monitoring systems and data-driven management frameworks.</strong></p>
+                </div>
+                <!-- Skill 3 -->
+                <div class="skill-card opacity-100 md:opacity-0 min-w-[85vw] md:min-w-0 snap-center pr-6 md:pr-0">
+                    <div class="text-ochre font-display text-2xl font-bold mb-4">03. Communication & Debate</div>
+                    <p class="text-cream/80 leading-relaxed font-light"><strong class="text-white">Active college debater</strong> and <strong class="text-white">MUNner. MACEMUN Deputy Secretary General</strong> and <strong class="text-white">SAE Chairperson.</strong> Licensed and curated <strong class="text-white">TEDxDantewada.</strong> <strong class="text-white">Wrote two books</strong> <strong class="text-white">(Obsessions of a Firewright, The Art of Observation)</strong> & co-authored <strong class="text-white">Assortment of Pearls.</strong></p>
+                </div>
+                <!-- Skill 4 -->
+                <div class="skill-card opacity-100 md:opacity-0 min-w-[85vw] md:min-w-0 snap-center pr-6 md:pr-0">
+                    <div class="text-ochre font-display text-2xl font-bold mb-4">04. Document Drafting & Strategy</div>
+                    <p class="text-cream/80 leading-relaxed font-light">Expertise in <strong class="text-white">DPR Formulation</strong> and <strong class="text-white">World Bank proposals</strong> (Cyclone Shelters). Worked on <strong class="text-white">state-level strategy docs</strong> alongside <strong class="text-white">government functionaries</strong>, and optimized massive schemes like <strong class="text-white">Vathilppadi Sevanam.</strong></p>
+                </div>
+                <!-- Skill 5 -->
+                <div class="skill-card opacity-100 md:opacity-0 min-w-[85vw] md:min-w-0 snap-center pr-6 md:pr-0">
+                    <div class="text-ochre font-display text-2xl font-bold mb-4">05. Project Management (Scale)</div>
+                    <p class="text-cream/80 leading-relaxed font-light">Overseeing <strong class="text-white">₹530+ Crore</strong> funds across <strong class="text-white">250+ concurrent projects.</strong> Spearheaded the <strong class="text-white">NITI Aayog Sampoornata Abhiyan</strong> and architected the <strong class="text-white">District Agri-Rural Transformative Plan (DARTP)</strong> across <strong class="text-white">234 villages</strong> covering <strong class="text-white">144 KPIs.</strong></p>
+                </div>
+                <!-- Skill 6 -->
+                <div class="skill-card opacity-100 md:opacity-0 min-w-[85vw] md:min-w-0 snap-center pr-6 md:pr-0">
+                    <div class="text-ochre font-display text-2xl font-bold mb-4">06. Certifications & Fellowships</div>
+                    <p class="text-cream/80 leading-relaxed font-light">Trained in <strong class="text-white">Public Policy & Governance</strong> by the <strong class="text-white">Institute of Management in Government</strong> <strong class="text-white">(IMG, Kerala).</strong> Completed the <strong class="text-white">Public Policy in Action (PPiA)</strong> <strong class="text-white">Fellowship (Hindu College, DU & TRI).</strong></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section (Scroll Progress & STAR Format) -->
+    <section id="experience" class="py-32 px-8 md:px-24 relative bg-cream/90 backdrop-blur-md">
+        <h2 class="text-4xl md:text-7xl font-display font-bold text-ink uppercase mb-24 section-title">Professional Experience</h2>
+        
+        <div class="max-w-6xl mx-auto relative pl-0 md:pl-20">
+            <!-- Progress Line -->
+            <div class="absolute left-[27px] top-0 bottom-0 w-[2px] bg-ink/10 hidden md:block">
+                <div id="scroll-progress-line" class="w-full bg-vermilion origin-top h-full scale-y-0"></div>
+            </div>
+
+            <div class="space-y-32">
+                <!-- Job 1 -->
+                <div class="experience-row flex flex-col md:flex-row gap-8 relative">
+                    <!-- Bubble Logo replaced with actual image -->
+                    <div class="hidden md:flex absolute -left-20 top-0 w-14 h-14 rounded-full bg-cream border-4 border-ink z-10 overflow-hidden justify-center items-center shadow-lg hover:scale-110 transition-transform">
+                        <img src="logos/afc.png" class="w-10 h-10 object-contain" alt="AFC India Logo">
+                    </div>
+                    <div class="w-full md:w-1/3 flex flex-col items-start">
+                        <span class="font-bold text-vermilion uppercase tracking-widest text-sm mb-2">08/2026 – Present</span>
+                        <h3 class="text-3xl font-display font-bold uppercase mb-1">Team Lead</h3>
+                        <p class="text-prussian font-bold">AFC India Ltd. | Raigarh</p>
+                    </div>
+                    <div class="w-full md:w-2/3 border-t-2 border-ink pt-6 mt-6 md:mt-0 md:border-t-0 md:pt-0">
+                        <ul class="space-y-4 text-ink/80 text-lg">
+                            <li class="flex gap-4"><span class="text-vermilion font-bold">→</span> <span><strong>Directed PMU execution</strong> for <strong>₹130+ Crores</strong> fund, driving strategic rollout for the District Mineral Foundation.</span></li>
+                            <li class="flex gap-4"><span class="text-vermilion font-bold">→</span> <span><strong>Engineered a centralized dashboard</strong>, achieving a <strong>40% reduction</strong> in reporting delays across <strong>250+ projects</strong>.</span></li>
+                            <li class="flex gap-4"><span class="text-vermilion font-bold">→</span> <span><strong>Facilitated multi-stakeholder convergence</strong> between administration, external partners, and local communities.</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Job 2 -->
+                <div class="experience-row flex flex-col md:flex-row gap-8 relative">
+                    <div class="hidden md:flex absolute -left-20 top-0 w-14 h-14 rounded-full bg-white border-4 border-ink z-10 overflow-hidden justify-center items-center shadow-lg hover:scale-110 transition-transform">
+                        <img src="logos/tri.png" class="w-10 h-10 object-contain" alt="TRI Logo">
+                    </div>
+                    <div class="w-full md:w-1/3 flex flex-col items-start">
+                        <span class="font-bold text-vermilion uppercase tracking-widest text-sm mb-2">04/2024 – 04/2025</span>
+                        <h3 class="text-3xl font-display font-bold uppercase mb-1">Public Policy Fellow</h3>
+                        <p class="text-prussian font-bold">Transform Rural India | Dantewada</p>
+                    </div>
+                    <div class="w-full md:w-2/3 border-t-2 border-ink pt-6 mt-6 md:mt-0 md:border-t-0 md:pt-0">
+                        <ul class="space-y-4 text-ink/80 text-lg">
+                            <li class="flex gap-4"><span class="text-vermilion font-bold">→</span> <span><strong>Conceptualized & Established</strong> Chhattisgarh’s first Youth Hubs, directly impacting <strong>10,000+ rural youth</strong> in a highly volatile LWE region.</span></li>
+                            <li class="flex gap-4"><span class="text-vermilion font-bold">→</span> <span><strong>Architected & Executed</strong> Sampoornata Abhiyan and the DARTP alongside NITI Aayog across <strong>234 villages</strong>.</span></li>
+                            <li class="flex gap-4"><span class="text-vermilion font-bold">→</span> <span><strong>Secured sanctioning</strong> for <strong>7,438</strong> water conservation structures and <strong>₹1.8 crore</strong> for critical rural public transport.</span></li>
+                            <li class="flex gap-4"><span class="text-vermilion font-bold">→</span> <span><strong>Spearheaded Mahila Lakhpati Mission</strong>, upgrading livelihoods for <strong>1,300+ tribal women</strong> via strategic B2B market linkages.</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Job 3 -->
+                <div class="experience-row flex flex-col md:flex-row gap-8 relative">
+                    <div class="hidden md:flex absolute -left-20 top-0 w-14 h-14 rounded-full bg-cream border-4 border-ink z-10 overflow-hidden justify-center items-center shadow-lg hover:scale-110 transition-transform">
+                        <img src="logos/kerala.png" class="w-10 h-10 object-contain" alt="Kerala Govt Logo">
+                    </div>
+                    <div class="w-full md:w-1/3 flex flex-col items-start">
+                        <span class="font-bold text-vermilion uppercase tracking-widest text-sm mb-2">08/2022 – 03/2023</span>
+                        <h3 class="text-3xl font-display font-bold uppercase mb-1">Project Fellow</h3>
+                        <p class="text-prussian font-bold">Govt. of Kerala (KYLA) | Trivandrum</p>
+                    </div>
+                    <div class="w-full md:w-2/3 border-t-2 border-ink pt-6 mt-6 md:mt-0 md:border-t-0 md:pt-0">
+                        <ul class="space-y-4 text-ink/80 text-lg">
+                            <li class="flex gap-4"><span class="text-vermilion font-bold">→</span> <span><strong>Selected from 10,000+</strong> candidates for YKIP; commended as an 'irreplaceable resource' by the District Collector.</span></li>
+                            <li class="flex gap-4"><span class="text-vermilion font-bold">→</span> <span><strong>Streamlined Vathilppadi Sevanam</strong> scheme, optimizing last-mile service delivery for <strong>30,000 senior citizens</strong>.</span></li>
+                            <li class="flex gap-4"><span class="text-vermilion font-bold">→</span> <span><strong>Investigated anti-corruption</strong> cases as a trusted inquiry commission member alongside the Sub-Collector.</span></li>
+                            <li class="flex gap-4"><span class="text-vermilion font-bold">→</span> <span><strong>Coordinated mass crowd management</strong> as Assistant Nodal Officer at Emergency Operations Centres (DDMA).</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Job 4 -->
+                <div class="experience-row flex flex-col md:flex-row gap-8 relative">
+                    <div class="hidden md:flex absolute -left-20 top-0 w-14 h-14 rounded-full bg-white border-4 border-ink z-10 overflow-hidden justify-center items-center shadow-lg hover:scale-110 transition-transform">
+                        <img src="logos/tcs.png" class="w-12 h-12 object-contain" alt="TCS Logo">
+                    </div>
+                    <div class="w-full md:w-1/3 flex flex-col items-start">
+                        <span class="font-bold text-vermilion uppercase tracking-widest text-sm mb-2">07/2021 – 07/2022</span>
+                        <h3 class="text-2xl font-display font-bold uppercase mb-1">Asst. Systems Engineer</h3>
+                        <p class="text-prussian font-bold">Tata Consultancy Services | Chennai</p>
+                    </div>
+                    <div class="w-full md:w-2/3 border-t-2 border-ink pt-6 mt-6 md:mt-0 md:border-t-0 md:pt-0">
+                        <ul class="space-y-4 text-ink/80 text-lg">
+                            <li class="flex gap-4"><span class="text-vermilion font-bold">→</span> <span><strong>Executed deep data analysis</strong> and robust problem-solving frameworks within the BFSI vertical.</span></li>
+                            <li class="flex gap-4"><span class="text-vermilion font-bold">→</span> <span><strong>Engineered strict defect tracking</strong> and version control mechanisms in a high-paced Agile environment.</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Extensive Achievements & Figures (Horizontal Scroll) -->
+    <section id="achievements" class="bg-ink/95 backdrop-blur-md text-cream relative h-[400vh] z-30">
+        <div class="sticky top-0 h-screen flex flex-col justify-start overflow-hidden pt-20 pb-4">
+            <div class="px-8 md:px-24 mb-2 relative z-10">
+                <h2 class="text-3xl md:text-5xl lg:text-6xl font-display font-bold uppercase text-ochre section-title">By The Numbers</h2>
+                <p class="text-sm md:text-base mt-1 max-w-2xl text-cream/70">A history of obsessive curiosity, extreme competitiveness, and massive scale impact.</p>
+            </div>
+
+            <!-- Horizontal Scrolling Track -->
+            <div id="horizontal-track" class="flex gap-4 px-8 md:px-24 w-max relative z-10 items-start">
+                
+                <!-- Card 1 -->
+                <div class="w-[85vw] md:w-[45vw] flex-shrink-0 bg-cream text-ink p-5 md:p-6 border-4 border-vermilion relative group snap-center">
+                    <div class="text-6xl md:text-7xl font-display font-bold text-vermilion/10 absolute right-4 top-4 group-hover:scale-110 transition-transform">01</div>
+                    <h3 class="text-lg md:text-xl font-bold uppercase mb-3 relative z-10">Scale & Governance</h3>
+                    <ul class="space-y-1.5 font-light text-sm md:text-base relative z-10 leading-snug">
+                        <li><strong class="font-bold text-vermilion">₹530+ Crore</strong> DMF fund execution</li>
+                        <li><strong class="font-bold text-vermilion">250+</strong> concurrent projects tracked</li>
+                        <li><strong class="font-bold text-vermilion">10,000+</strong> youth empowered in LWE areas</li>
+                        <li><strong class="font-bold text-vermilion">30,000</strong> senior citizens supported</li>
+                        <li><strong class="font-bold text-vermilion">7,438</strong> water structures sanctioned</li>
+                    </ul>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="w-[85vw] md:w-[45vw] flex-shrink-0 bg-prussian text-cream p-5 md:p-6 border-4 border-ochre relative group snap-center">
+                    <div class="text-6xl md:text-7xl font-display font-bold text-ochre/20 absolute right-4 top-4 group-hover:scale-110 transition-transform">02</div>
+                    <h3 class="text-lg md:text-xl font-bold uppercase mb-3 relative z-10">Academic Excellence</h3>
+                    <ul class="space-y-1.5 font-light text-sm md:text-base relative z-10 leading-snug">
+                        <li><strong class="font-bold text-ochre">8.6 CGPA</strong> (B.Tech Hons, Mechanical Engineering)</li>
+                        <li><strong class="font-bold text-ochre">92.3%</strong> ICSE / <strong class="font-bold text-ochre">92%</strong> CBSE simultaneously</li>
+                        <li>Certified <strong class="font-bold text-ochre">Google AI Professional</strong></li>
+                        <li>Trained in <strong class="font-bold text-ochre">Public Policy, Governance, and Management</strong> by the <strong class="font-bold text-ochre">Institute of Management in Government, Thiruvananthapuram</strong> (The state administrative training institute of civil servants in Keralam)</li>
+                        <li>Completed the <strong class="font-bold text-ochre">PPiA Fellowship</strong> with the <strong class="font-bold text-ochre">Department of Home Affairs, Government of Chhattisgarh</strong>, and certified by <strong class="font-bold text-ochre">Hindu College, University of Delhi</strong> and <strong class="font-bold text-ochre">Transform Rural India</strong></li>
+                    </ul>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="w-[85vw] md:w-[45vw] flex-shrink-0 bg-vermilion text-cream p-5 md:p-6 border-4 border-ink relative group">
+                    <div class="text-6xl md:text-7xl font-display font-bold text-ink/20 absolute right-4 top-4 group-hover:scale-110 transition-transform">03</div>
+                    <h3 class="text-lg md:text-xl font-bold uppercase mb-3 relative z-10">Key Projects</h3>
+                    <ul class="space-y-1.5 font-light text-sm md:text-base relative z-10 leading-snug">
+                        <li>Designed & Executed <strong>Youth Hubs</strong> bridging the rural opportunity gap.</li>
+                        <li>Spearheaded <strong>Sampoornata Abhiyan</strong> for holistic district development.</li>
+                        <li>Architected the <strong>DARTP</strong> across 234 villages with NITI Aayog.</li>
+                        <li>Launched <strong>Mahila Lakhpati Mission</strong> to scale tribal household income.</li>
+                        <li>Optimized the <strong>Vathilppadi Sevanam</strong> doorstep service scheme.</li>
+                    </ul>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="w-[85vw] md:w-[45vw] flex-shrink-0 bg-cream text-ink p-5 md:p-6 border-4 border-prussian relative group">
+                    <div class="text-6xl md:text-7xl font-display font-bold text-prussian/20 absolute right-4 top-4 group-hover:scale-110 transition-transform">04</div>
+                    <h3 class="text-lg md:text-xl font-bold uppercase mb-3 relative z-10">Leadership & Comms</h3>
+                    <ul class="space-y-1.5 font-light text-sm md:text-base relative z-10 leading-snug">
+                        <li><strong class="font-bold text-prussian">Authored</strong> <em>Obsessions of a Firewright</em> and <em>The Art of Observation</em>. <strong class="font-bold text-prussian">Co-authored</strong> <em>Assortment of Pearls</em>.</li>
+                        <li><strong class="font-bold text-prussian">Curator</strong> of TEDxDantewada (one of rural India's first TEDx events)</li>
+                        <li><strong class="font-bold text-prussian">Active</strong> college debater and MUNner. Hosted <em>The ASK Podcast</em>.</li>
+                        <li><strong class="font-bold text-prussian">Chairperson</strong> SAE MACE & <strong class="font-bold text-prussian">Deputy Sec Gen</strong> MACEMUN</li>
+                        <li>Mentored <strong class="font-bold text-prussian">30+ students</strong> via Superprof</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Scroll Progress Indicator for Horizontal Section -->
+            <div class="absolute bottom-8 left-8 right-8 md:left-24 md:right-24 h-1 bg-cream/20 z-20 overflow-hidden">
+                <div id="horizontal-progress" class="h-full bg-vermilion w-full origin-left scale-x-0"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Field Gallery (Infinite Draggable Canvas) -->
+    <section id="gallery" class="bg-ink text-cream relative overflow-hidden h-[100vh] w-full border-t-8 border-b-8 border-vermilion">
+        <!-- Header -->
+        <div class="absolute top-10 left-8 md:left-24 z-30 pointer-events-none">
+            <h2 class="text-4xl md:text-6xl font-display font-bold uppercase text-vermilion drop-shadow-[0_5px_5px_rgba(0,0,0,0.9)]">In The Field</h2>
+            <p class="text-base md:text-lg mt-2 max-w-xl text-cream/90 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">Grassroots operations, community engagement, and on-the-ground impact.</p>
+        </div>
+
+        <!-- Zoom Controls -->
+        <div class="absolute bottom-10 right-8 z-30 flex flex-col gap-2">
+            <button id="zoom-in" class="w-10 h-10 bg-vermilion text-white font-bold text-xl flex items-center justify-center hover:bg-ochre transition-colors shadow-lg">+</button>
+            <button id="zoom-out" class="w-10 h-10 bg-vermilion text-white font-bold text-xl flex items-center justify-center hover:bg-ochre transition-colors shadow-lg">−</button>
+        </div>
+
+        <!-- Drag Instruction -->
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-3 opacity-60 pointer-events-none z-20 text-cream">
+            <div class="w-10 h-[1px] bg-cream"></div>
+            <span class="uppercase tracking-widest text-xs font-bold">Drag to Explore · Use + / − to Zoom</span>
+            <div class="w-10 h-[1px] bg-cream"></div>
+        </div>
+
+        <!-- The Canvas -->
+        <div id="gallery-container" class="relative w-full h-full overflow-hidden cursor-grab">
+            <!-- Draggable + zoomable surface -->
+            <div id="gallery-track" class="absolute" style="width:2400px; height:1800px; top:50%; left:50%; transform-origin:center center;">
+                <!-- Photos injected by JS -->
+            </div>
+        </div>
+    </section>
+
+    <script>
+    (function() {
+        const photos = [
+            "3e564ad7-7b66-44a1-bece-9039c6c35208.jpg",
+            "IMG_1155.jpg",
+            "IMG_2748.jpg",
+            "IMG_2759.jpg",
+            "IMG_2833.jpg",
+            "IMG_3984.jpg",
+            "IMG_3987.jpg",
+            "IMG_5016.jpg",
+            "Screenshot 2026-09-22 at 7.52.02\u202fPM.png",
+            "Screenshot 2026-09-22 at 7.53.12\u202fPM.png",
+            "Screenshot 2026-09-22 at 7.53.45\u202fPM.png",
+            "Screenshot 2026-09-22 at 7.54.42\u202fPM.png",
+            "Screenshot 2026-09-22 at 7.55.24\u202fPM.png",
+            "Screenshot 2026-09-22 at 7.55.48\u202fPM.png",
+            "Screenshot 2026-09-22 at 7.56.39\u202fPM.png",
+            "Screenshot 2026-09-22 at 8.01.40\u202fPM.png",
+            "Screenshot 2026-09-22 at 8.03.19\u202fPM.png",
+            "Screenshot 2026-09-22 at 8.03.48\u202fPM.png",
+            "Screenshot 2026-09-22 at 8.04.38\u202fPM.png",
+            "Screenshot 2026-09-22 at 8.05.22\u202fPM.png",
+            "e6ecb46a-608c-4329-b5ab-2ac35ce07cad.jpg"
+        ];
+
+        // Canvas size & photo dimensions
+        const CW = 2800, CH = 2000;   // virtual canvas px (expanded slightly to fit all 21 without overlap)
+        const PW = 360;               // photo width px
+        const MIN_GAP = 440;          // minimum distance between photo centres (large enough for rotated corners)
+
+        const track = document.getElementById('gallery-track');
+        track.style.width  = CW + 'px';
+        track.style.height = CH + 'px';
+
+        // --- True random scatter with gap enforcement ---
+        const placed = []; // [{cx, cy}]
+
+        function tryPlace(attempts) {
+            let bestPos = { cx: 0, cy: 0 };
+            let maxDistToNearest = -1;
+
+            for (let a = 0; a < attempts; a++) {
+                // Keep photos well inside canvas so they're all reachable
+                const cx = 180 + Math.random() * (CW - 360);
+                const cy = 180 + Math.random() * (CH - 360);
+                
+                let distToNearest = Infinity;
+                for (let i = 0; i < placed.length; i++) {
+                    const dx = cx - placed[i].cx;
+                    const dy = cy - placed[i].cy;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist < distToNearest) distToNearest = dist;
+                }
+
+                if (distToNearest >= MIN_GAP) {
+                    return { cx, cy }; // Found a perfect spot immediately
+                }
+
+                // Track the "least overlapping" spot just in case it's tightly packed
+                if (distToNearest > maxDistToNearest) {
+                    maxDistToNearest = distToNearest;
+                    bestPos = { cx, cy };
+                }
+            }
+            // Fallback: place in the spot that had the MOST distance from neighbors
+            return bestPos;
+        }
+
+        photos.forEach((name, i) => {
+            const pos = tryPlace(3000); // Massive number of attempts to guarantee no overlaps
+            placed.push(pos);
+
+            const rot = (Math.random() - 0.5) * 22;   // ±11 deg
+            const x   = pos.cx - PW / 2;
+            const y   = pos.cy - 80;                  // offset so centre of photo is at cy
+
+            const div = document.createElement('div');
+            div.style.cssText = `
+                position: absolute;
+                left: ${x}px;
+                top:  ${y}px;
+                width: ${PW}px;
+                transform: rotate(${rot}deg);
+                box-shadow: 0 12px 35px rgba(0,0,0,0.8);
+                border: 10px solid white;
+                transition: transform 0.25s ease, box-shadow 0.25s ease;
+                cursor: pointer;
+                z-index: ${Math.floor(Math.random() * 6) + 1};
+                background: #222;
+            `;
+
+            div.addEventListener('mouseenter', () => {
+                div.style.transform   = `rotate(${rot}deg) scale(1.15)`;
+                div.style.zIndex      = 100;
+                div.style.boxShadow   = '0 24px 60px rgba(0,0,0,0.95)';
+            });
+            div.addEventListener('mouseleave', () => {
+                div.style.transform   = `rotate(${rot}deg) scale(1)`;
+                div.style.zIndex      = Math.floor(Math.random() * 6) + 1;
+                div.style.boxShadow   = '0 12px 35px rgba(0,0,0,0.8)';
+            });
+
+            const img = document.createElement('img');
+            img.src = 'Photos/' + encodeURIComponent(name);
+            img.alt = 'Field photo ' + (i + 1);
+            img.style.cssText = 'width:100%; height:auto; display:block; pointer-events:none;';
+            img.loading = 'lazy';
+
+            div.appendChild(img);
+            track.appendChild(div);
+        });
+
+        // --- Pan & Zoom Engine ---
+        const container = document.getElementById('gallery-container');
+
+        let panX = 0, panY = 0, targetPanX = 0, targetPanY = 0;
+        let zoom = 0.55, targetZoom = 0.55;   // ~3-4 photos visible at once
+        let isDragging = false;
+        let startMX, startMY, startPX, startPY;
+
+        function applyTransform() {
+            track.style.transform = `translate(calc(-50% + ${panX}px), calc(-50% + ${panY}px)) scale(${zoom})`;
+        }
+        applyTransform();
+
+        (function tick() {
+            panX  += (targetPanX - panX)  * 0.1;
+            panY  += (targetPanY - panY)  * 0.1;
+            zoom  += (targetZoom - zoom)  * 0.1;
+            applyTransform();
+            requestAnimationFrame(tick);
+        })();
+
+        // Mouse drag
+        container.addEventListener('mousedown', e => {
+            isDragging = true;
+            startMX = e.clientX; startMY = e.clientY;
+            startPX = targetPanX; startPY = targetPanY;
+            container.style.cursor = 'grabbing';
+        });
+        window.addEventListener('mousemove', e => {
+            if (!isDragging) return;
+            targetPanX = startPX + (e.clientX - startMX);
+            targetPanY = startPY + (e.clientY - startMY);
+        });
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+            container.style.cursor = 'grab';
+        });
+
+        // Touch drag
+        container.addEventListener('touchstart', e => {
+            isDragging = true;
+            startMX = e.touches[0].clientX; startMY = e.touches[0].clientY;
+            startPX = targetPanX; startPY = targetPanY;
+        }, { passive: true });
+        window.addEventListener('touchmove', e => {
+            if (!isDragging) return;
+            targetPanX = startPX + (e.touches[0].clientX - startMX);
+            targetPanY = startPY + (e.touches[0].clientY - startMY);
+        }, { passive: true });
+        window.addEventListener('touchend', () => { isDragging = false; });
+
+        // Zoom buttons only
+        document.getElementById('zoom-in').addEventListener('click', () => {
+            targetZoom = Math.min(2.0, targetZoom + 0.15);
+        });
+        document.getElementById('zoom-out').addEventListener('click', () => {
+            targetZoom = Math.max(0.25, targetZoom - 0.15);
+        });
+
+        // Pan clamping so you can't drag into infinity
+        const MAX_PAN = 1000;
+        setInterval(() => {
+            if (!isDragging) {
+                if (targetPanX >  MAX_PAN) targetPanX =  MAX_PAN;
+                if (targetPanX < -MAX_PAN) targetPanX = -MAX_PAN;
+                if (targetPanY >  MAX_PAN) targetPanY =  MAX_PAN;
+                if (targetPanY < -MAX_PAN) targetPanY = -MAX_PAN;
+            }
+        }, 200);
+    })();
+    </script>
+
+    <!-- Contact & Action Section -->
+    <section id="contact" class="min-h-[80vh] flex flex-col justify-center items-center text-center px-8 bg-ochre/95 backdrop-blur-md text-ink border-t-8 border-ink">
+        <h2 class="text-6xl md:text-9xl font-display font-bold uppercase tracking-tighter mb-8 contact-title">
+            The Next Step.
+        </h2>
+        <p class="text-xl md:text-3xl max-w-2xl font-light mb-12 contact-desc">
+            For strategic roles and policy initiatives at the highest level.
+        </p>
+        <div class="flex flex-col md:flex-row justify-center items-center gap-6 text-lg w-full max-w-5xl">
+            <a href="mailto:akhilskofficial@gmail.com" class="group relative px-8 py-4 border-2 border-prussian text-prussian font-bold uppercase tracking-wider hover:bg-prussian hover:text-cream transition-colors duration-300 w-full md:w-auto text-center">
+                Email Me
+            </a>
+            <a href="https://www.linkedin.com/in/akhilsreeekumar/" target="_blank" class="px-8 py-4 text-prussian font-bold uppercase tracking-wider hover:text-vermilion transition-colors duration-300 w-full md:w-auto flex items-center justify-center gap-2">
+                LinkedIn <span class="text-vermilion opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">→</span>
+            </a>
+            <a href="https://akhilsreekumar.medium.com" target="_blank" class="px-8 py-4 text-prussian font-bold uppercase tracking-wider hover:text-vermilion transition-colors duration-300 w-full md:w-auto flex items-center justify-center gap-2">
+                Medium <span class="text-vermilion opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">→</span>
+            </a>
+            <a href="https://github.com/firewright8" target="_blank" class="px-8 py-4 text-prussian font-bold uppercase tracking-wider hover:text-vermilion transition-colors duration-300 w-full md:w-auto flex items-center justify-center gap-2">
+                GitHub <span class="text-vermilion opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">→</span>
+            </a>
+            <a href="tel:+917591986470" class="group relative px-8 py-4 border-2 border-prussian text-prussian font-bold uppercase tracking-wider hover:bg-prussian hover:text-cream transition-colors duration-300 w-full md:w-auto text-center">
+                Call Me
+            </a>
+        </div>
+    </section>
+
+    <!-- Motion.dev inline module -->
+    <script type="module">
+        import { animate, scroll, inView, stagger } from "https://cdn.jsdelivr.net/npm/motion@11.11.13/+esm";
+        
+        // --- 1. Lenis Smooth Scroll ---
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            smooth: true
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // --- 2. Three.js Background (Dot Globe/Network + Constellations + Stars) ---
+        const canvas = document.getElementById('webgl-canvas');
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0xF4F1EA, 0.0012); // Reduced fog to make it prominent
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 30;
+
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        // Primary Grid Particles
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 1500;
+        const posArray = new Float32Array(particlesCount * 3);
+        for(let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 120;
+        }
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const material = new THREE.PointsMaterial({ size: 0.15, color: 0x1D3B55, transparent: true, opacity: 0.9 }); 
+        const particlesMesh = new THREE.Points(particlesGeometry, material);
+        scene.add(particlesMesh);
+
+        // Abstract Wireframe shape in background
+        const geoShape = new THREE.IcosahedronGeometry(18, 1);
+        const matShape = new THREE.MeshBasicMaterial({ color: 0xD83121, wireframe: true, transparent: true, opacity: 0.15 }); 
+        const shapeMesh = new THREE.Mesh(geoShape, matShape);
+        scene.add(shapeMesh);
+
+        // Moving Constellations (Lines)
+        const constelGeo = new THREE.BufferGeometry();
+        const constelPts = [];
+        for(let i=0; i<150; i++) {
+            constelPts.push((Math.random()-0.5)*150, (Math.random()-0.5)*150, (Math.random()-0.5)*100);
+        }
+        constelGeo.setAttribute('position', new THREE.Float32BufferAttribute(constelPts, 3));
+        const indices = [];
+        for(let i=0; i<150; i++) {
+            for(let j=i+1; j<150; j++) {
+                if(Math.random() > 0.96) indices.push(i, j);
+            }
+        }
+        constelGeo.setIndex(indices);
+        const constelMat = new THREE.LineBasicMaterial({ color: 0xEBA834, transparent: true, opacity: 0.3 }); // Ochre lines
+        const constelMesh = new THREE.LineSegments(constelGeo, constelMat);
+        scene.add(constelMesh);
+
+        // Deep Background Stars
+        const starGeo = new THREE.BufferGeometry();
+        const starPts = [];
+        for(let i=0; i<400; i++) {
+            starPts.push((Math.random()-0.5)*250, (Math.random()-0.5)*250, (Math.random()-0.5)*200 - 50);
+        }
+        starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starPts, 3));
+        const starMat = new THREE.PointsMaterial({ size: 0.25, color: 0xD83121, transparent: true, opacity: 0.8 });
+        const starMesh = new THREE.Points(starGeo, starMat);
+        scene.add(starMesh);
+
+        let mouseX = 0;
+        let mouseY = 0;
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX - window.innerWidth / 2;
+            mouseY = e.clientY - window.innerHeight / 2;
+        });
+
+        function animateThree() {
+            requestAnimationFrame(animateThree);
+            particlesMesh.rotation.y += 0.0008;
+            particlesMesh.rotation.x += 0.0004;
+            
+            shapeMesh.rotation.y += 0.0015;
+            shapeMesh.rotation.x += 0.0008;
+
+            constelMesh.rotation.y -= 0.0005;
+            constelMesh.rotation.x -= 0.0003;
+
+            starMesh.rotation.y -= 0.0002;
+            starMesh.rotation.x += 0.0001;
+            
+            // Mouse parallax
+            particlesMesh.rotation.y += 0.05 * ((mouseX * 0.001) - particlesMesh.rotation.y);
+            particlesMesh.rotation.x += 0.05 * ((mouseY * 0.001) - particlesMesh.rotation.x);
+            
+            // Scroll parallax
+            camera.position.y = -window.scrollY * 0.015;
+            camera.position.x = Math.sin(window.scrollY * 0.001) * 3;
+            
+            renderer.render(scene, camera);
+        }
+        animateThree();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // --- 3. Custom Cursor ---
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.transform = `translate3d(${e.clientX - 4}px, ${e.clientY - 4}px, 0)`;
+        });
+        
+        // --- 4. Motion.dev Animations ---
+        animate(".hero-title", { y: [100, 0], opacity: [0, 1] }, { duration: 1.2, easing: [0.22, 1, 0.36, 1] });
+        animate(".hero-desc", { y: [50, 0], opacity: [0, 1] }, { duration: 1, delay: 0.4, easing: "ease-out" });
+        animate(".hero-buttons a", { y: [30, 0], opacity: [0, 1] }, { duration: 0.8, delay: stagger(0.1, { start: 0.6 }) });
+        animate(".hero-bg-panel", { scaleX: [0, 1] }, { duration: 1.5, easing: [0.22, 1, 0.36, 1] });
+        
+        inView("#about", () => {
+            animate("#about .section-title", { opacity: [0, 1], y: [40, 0] }, { duration: 0.8, easing: "ease-out" });
+            animate(".skill-card", { opacity: [0, 1], y: [40, 0] }, { duration: 0.8, delay: stagger(0.1, { start: 0.2 }), easing: "ease-out" });
+        }, { margin: "-20% 0px" });
+        
+        const scrollProgressLine = document.getElementById("scroll-progress-line");
+        const experienceSection = document.getElementById("experience");
+        if(scrollProgressLine && experienceSection) {
+            scroll(
+                animate(scrollProgressLine, { scaleY: [0, 1] }),
+                { target: experienceSection, offset: ["start center", "end center"] }
+            );
+        }
+        
+        const experienceRows = document.querySelectorAll(".experience-row");
+        experienceRows.forEach((row) => {
+            row.style.opacity = "0";
+            row.style.transform = "translateX(-30px)";
+            inView(row, () => {
+                animate(row, { opacity: [0, 1], x: [-30, 0] }, { duration: 0.8, easing: "ease-out" });
+            }, { margin: "-10% 0px" });
+        });
+        
+        const achievementsSection = document.getElementById("achievements");
+        const horizontalTrack = document.getElementById("horizontal-track");
+        const horizontalProgress = document.getElementById("horizontal-progress");
+        if (achievementsSection && horizontalTrack) {
+            const updateScroll = () => {
+                const scrollDistance = horizontalTrack.scrollWidth - window.innerWidth + 200;
+                scroll(
+                    animate(horizontalTrack, { x: ["0px", `-${scrollDistance}px`] }),
+                    { target: achievementsSection, offset: ["start start", "end end"] }
+                );
+                if (horizontalProgress) {
+                    scroll(
+                        animate(horizontalProgress, { scaleX: [0, 1] }),
+                        { target: achievementsSection, offset: ["start start", "end end"] }
+                    );
+                }
+            };
+            setTimeout(updateScroll, 100);
+            window.addEventListener('resize', updateScroll);
+        }
+    </script>
+    <script>
+        // --- 5. Interactive Letter Hover Effect ---
+        const initLetterHover = () => {
+            const title = document.querySelector('.hero-title-text');
+            if(!title) return;
+            const text = title.innerHTML.trim(); // get innerHTML to read the <br/>
+            title.innerHTML = '';
+            
+            const colors = ['#D83121', '#EBA834', '#1D3B55']; // vermilion, ochre, prussian
+            
+            // split by <br/> then split by char
+            const lines = text.split(/<br\s*\/?>/i);
+            
+            lines.forEach((line, index) => {
+                const lineDiv = document.createElement('div');
+                
+                line.trim().split('').forEach(char => {
+                    if(char === ' ') {
+                        lineDiv.appendChild(document.createTextNode(' '));
+                    } else {
+                        const span = document.createElement('span');
+                        span.textContent = char;
+                        // Add smooth transition for color
+                        span.className = 'transition-colors duration-500 ease-out inline-block';
+                        
+                        span.addEventListener('mouseenter', () => {
+                            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                            span.style.color = randomColor;
+                            span.style.transitionDuration = '0s'; // instant color change on enter
+                        });
+                        
+                        span.addEventListener('mouseleave', () => {
+                            span.style.transitionDuration = '1s'; // slow fade back on leave
+                            span.style.color = '';
+                        });
+                        
+                        lineDiv.appendChild(span);
+                    }
+                });
+                title.appendChild(lineDiv);
+            });
+        };
+        document.fonts.ready.then(initLetterHover);
+    </script>
+    <script>
+        // --- 6. Fractal Topography Background ---
+        const initTopography = () => {
+            const canvas = document.getElementById('topo-canvas');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const simplex = new SimplexNoise();
+            
+            let width, height;
+            let time = 0;
+            let targetMouseX = -9999;
+            let targetMouseY = -9999;
+            let mouseX = -9999;
+            let mouseY = -9999;
+            
+            const resize = () => {
+                width = canvas.offsetWidth;
+                height = canvas.offsetHeight;
+                canvas.width = width;
+                canvas.height = height;
+            };
+            window.addEventListener('resize', resize);
+            resize();
+            
+            // Mouse interaction for the topography
+            const section = document.getElementById('about');
+            section.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                targetMouseX = e.clientX - rect.left;
+                targetMouseY = e.clientY - rect.top;
+            });
+            section.addEventListener('mouseleave', () => {
+                targetMouseX = -9999;
+                targetMouseY = -9999;
+            });
+            
+            const animateTopo = () => {
+                // Smooth mouse interpolation
+                if(targetMouseX === -9999) {
+                    mouseX = -9999;
+                    mouseY = -9999;
+                } else {
+                    if(mouseX === -9999) { mouseX = targetMouseX; mouseY = targetMouseY; }
+                    mouseX += (targetMouseX - mouseX) * 0.05;
+                    mouseY += (targetMouseY - mouseY) * 0.05;
+                }
+                
+                ctx.clearRect(0, 0, width, height);
+                ctx.lineWidth = 1.2;
+                ctx.lineJoin = "round";
+                
+                ctx.beginPath();
+                // Draw terrain lines
+                const numLines = 50;
+                for(let i = 0; i <= numLines; i++) {
+                    const yBase = (height / numLines) * i;
+                    ctx.moveTo(0, yBase);
+                    
+                    for(let x = 0; x <= width; x += 30) {
+                        // Base noise
+                        let n = simplex.noise3D(x * 0.0015, yBase * 0.002, time * 0.0002);
+                        
+                        // Interactive warp around mouse
+                        let warp = 0;
+                        if(mouseX !== -9999) {
+                            const dx = x - mouseX;
+                            const dy = yBase - mouseY;
+                            const dist = Math.sqrt(dx*dx + dy*dy);
+                            if(dist < 350) {
+                                warp = (350 - dist) * 0.25 * Math.sin(time * 0.002 + dist * 0.01);
+                            }
+                        }
+                        
+                        const displacement = (n * 70) - warp;
+                        ctx.lineTo(x, yBase + displacement);
+                    }
+                }
+                ctx.strokeStyle = 'rgba(235, 168, 52, 0.15)'; // Ochre with low opacity
+                ctx.stroke();
+                
+                time += 16;
+                requestAnimationFrame(animateTopo);
+            };
+            animateTopo();
+        };
+        initTopography();
+    </script>
+
+</body>
+</html>
