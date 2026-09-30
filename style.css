@@ -1,6 +1,5 @@
 /* style.css */
 html {
-    scroll-behavior: smooth;
     cursor: none; /* Hide default cursor to use our custom one */
 }
 

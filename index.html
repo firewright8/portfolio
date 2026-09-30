@@ -256,9 +256,9 @@
     </section>
 
     <!-- Extensive Achievements & Figures (Horizontal Scroll) -->
-    <section id="achievements" class="bg-ink/95 backdrop-blur-md text-cream relative h-[400vh] z-30">
-        <!-- The Sticky Container (Only sticky on desktop) -->
-        <div class="relative md:sticky top-0 h-auto md:h-screen flex flex-col justify-start overflow-visible md:overflow-hidden pt-20 pb-20 md:pb-0">
+    <section id="achievements" class="bg-ink/95 backdrop-blur-md text-cream relative min-h-screen md:h-screen md:overflow-hidden z-30">
+        <!-- The Track Container -->
+        <div class="h-full flex flex-col justify-start overflow-visible md:overflow-hidden pt-20 pb-20 md:pb-0">
             <!-- Header for horizontal section -->
             <div class="px-8 md:px-24 mb-8 md:mb-12 flex-shrink-0 relative z-10">
                 <h2 class="text-4xl md:text-7xl font-display font-bold uppercase text-ink/20 absolute -top-8 md:-top-12 -left-4 md:-left-8 z-0 w-full whitespace-nowrap overflow-hidden">Metrics</h2>
@@ -361,27 +361,27 @@
     <script>
     (function() {
         const photos = [
-            "3e564ad7-7b66-44a1-bece-9039c6c35208.jpg",
-            "IMG_1155.jpg",
-            "IMG_2748.jpg",
-            "IMG_2759.jpg",
-            "IMG_2833.jpg",
-            "IMG_3984.jpg",
-            "IMG_3987.jpg",
-            "IMG_5016.jpg",
-            "Screenshot 2026-09-22 at 7.52.02\u202fPM.png",
-            "Screenshot 2026-09-22 at 7.53.12\u202fPM.png",
-            "Screenshot 2026-09-22 at 7.53.45\u202fPM.png",
-            "Screenshot 2026-09-22 at 7.54.42\u202fPM.png",
-            "Screenshot 2026-09-22 at 7.55.24\u202fPM.png",
-            "Screenshot 2026-09-22 at 7.55.48\u202fPM.png",
-            "Screenshot 2026-09-22 at 7.56.39\u202fPM.png",
-            "Screenshot 2026-09-22 at 8.01.40\u202fPM.png",
-            "Screenshot 2026-09-22 at 8.03.19\u202fPM.png",
-            "Screenshot 2026-09-22 at 8.03.48\u202fPM.png",
-            "Screenshot 2026-09-22 at 8.04.38\u202fPM.png",
-            "Screenshot 2026-09-22 at 8.05.22\u202fPM.png",
-            "e6ecb46a-608c-4329-b5ab-2ac35ce07cad.jpg"
+            "gallery-photos/photo-01.jpg",
+            "gallery-photos/photo-02.jpg",
+            "gallery-photos/photo-03.jpg",
+            "gallery-photos/photo-04.jpg",
+            "gallery-photos/photo-05.jpg",
+            "gallery-photos/photo-06.jpg",
+            "gallery-photos/photo-07.jpg",
+            "gallery-photos/photo-08.jpg",
+            "gallery-photos/photo-09.jpg",
+            "gallery-photos/photo-10.jpg",
+            "gallery-photos/photo-11.jpg",
+            "gallery-photos/photo-12.jpg",
+            "gallery-photos/photo-13.jpg",
+            "gallery-photos/photo-14.jpg",
+            "gallery-photos/photo-15.jpg",
+            "gallery-photos/photo-16.jpg",
+            "gallery-photos/photo-17.jpg",
+            "gallery-photos/photo-18.jpg",
+            "gallery-photos/photo-19.jpg",
+            "gallery-photos/photo-20.jpg",
+            "gallery-photos/photo-21.jpg"
         ];
 
         // Canvas size & photo dimensions
@@ -462,7 +462,7 @@
             });
 
             const img = document.createElement('img');
-            img.src = encodeURIComponent(name); // Removed 'Photos/' prefix so it works perfectly in the root folder on GitHub!
+            img.src = name;
             img.alt = 'Field photo ' + (i + 1);
             img.style.cssText = 'width:100%; height:auto; display:block; pointer-events:none;';
             img.loading = 'lazy';
@@ -510,7 +510,7 @@
 
 
     <!-- Contact & Action Section -->
-    <section id="contact" class="min-h-[80vh] flex flex-col justify-center items-center text-center px-8 bg-ochre/95 backdrop-blur-md text-ink border-t-8 border-ink">
+    <section id="contact" class="min-h-screen py-24 flex flex-col justify-center items-center text-center px-8 bg-ochre/95 backdrop-blur-md text-ink border-t-8 border-ink relative z-30">
         <h2 class="text-6xl md:text-9xl font-display font-bold uppercase tracking-tighter mb-8 contact-title">
             The Next Step.
         </h2>
@@ -544,7 +544,8 @@
         const lenis = new Lenis({
             duration: 1.2,
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            smooth: true
+            smooth: true,
+            smoothTouch: false
         });
 
         lenis.on("scroll", ScrollTrigger.update);
@@ -552,6 +553,7 @@
             lenis.raf(time * 1000);
         });
         gsap.ticker.lagSmoothing(0);
+        ScrollTrigger.addEventListener("refresh", () => lenis.resize());
 
         // --- 2. Three.js Background (Dot Globe/Network + Constellations + Stars) ---
         const canvas = document.getElementById("webgl-canvas");
@@ -832,7 +834,7 @@
                 "(min-width: 768px)": function() {
                     const scrollDistance = () => horizontalTrack.scrollWidth - window.innerWidth + 200;
 
-                    gsap.to(horizontalTrack, {
+                    const tween = gsap.to(horizontalTrack, {
                         x: () => -scrollDistance(),
                         ease: "none",
                         scrollTrigger: {
@@ -840,6 +842,8 @@
                             start: "top top",
                             end: () => "+=" + scrollDistance(),
                             pin: true,
+                            pinSpacing: true,
+                            anticipatePin: 1,
                             scrub: 1,
                             invalidateOnRefresh: true,
                             onUpdate: (self) => {
@@ -849,6 +853,7 @@
                             }
                         }
                     });
+                    return () => tween.kill();
                 },
                 "(max-width: 767px)": function() {
                     gsap.set(horizontalTrack, { x: 0 });
