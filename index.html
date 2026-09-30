@@ -6,6 +6,7 @@
     <title>Akhil Sreekumar | Public Policy, Operations & Governance</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="src/shaders/threeui.css">
     <!-- Google Fonts for sharp, editorial typography -->
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
     <script>
@@ -36,7 +37,15 @@
     <!-- Custom Sharp Precision Cursor -->
     <div id="cursor" class="fixed top-0 left-0 w-2 h-2 bg-vermilion pointer-events-none mix-blend-difference z-[9999] transition-transform duration-100 ease-out origin-center hidden md:block"></div>
 
-    <!-- Scripts -->
+    <!-- GSAP 3 & Club GreenSock Suite (Local) -->
+    <script src="gsap-public/minified/gsap.min.js"></script>
+    <script src="gsap-public/minified/ScrollTrigger.min.js"></script>
+    <script src="gsap-public/minified/SplitText.min.js"></script>
+    <script src="gsap-public/minified/Draggable.min.js"></script>
+    <script src="gsap-public/minified/InertiaPlugin.min.js"></script>
+    <script src="gsap-public/minified/TextPlugin.min.js"></script>
+
+    <!-- Three.js & Lenis -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
     <!-- Simplex Noise for Fractal Topography -->
@@ -49,6 +58,7 @@
             <a href="#about" class="hover:text-vermilion transition-colors">Manifesto</a>
             <a href="#experience" class="hover:text-vermilion transition-colors">Experience</a>
             <a href="#achievements" class="hover:text-vermilion transition-colors">Achievements</a>
+            <a href="#working-volumes" class="hover:text-vermilion transition-colors">Working Volumes</a>
             <a href="#contact" class="hover:text-vermilion transition-colors">Contact</a>
         </div>
     </nav>
@@ -77,7 +87,9 @@
                 </a>
             </div>
         </div>
-        <div class="absolute top-0 right-0 w-1/2 h-full bg-ochre/10 -z-10 origin-right scale-x-0 hero-bg-panel pointer-events-none"></div>
+        <div class="absolute top-0 right-0 w-full md:w-1/2 h-full bg-ochre/10 -z-10 origin-right scale-x-0 hero-bg-panel pointer-events-none overflow-hidden">
+            <canvas id="hero-gradation-canvas" class="w-full h-full object-cover opacity-25 mix-blend-multiply"></canvas>
+        </div>
     </section>
 
     <!-- Executive Summary (The 10-Second Pitch) -->
@@ -445,7 +457,7 @@
             });
 
             const img = document.createElement('img');
-            img.src = 'Photos/' + encodeURIComponent(name);
+            img.src = encodeURIComponent(name); // Removed 'Photos/' prefix so it works perfectly in the root folder on GitHub!
             img.alt = 'Field photo ' + (i + 1);
             img.style.cssText = 'width:100%; height:auto; display:block; pointer-events:none;';
             img.loading = 'lazy';
@@ -454,78 +466,78 @@
             track.appendChild(div);
         });
 
-        // --- Pan & Zoom Engine ---
-        const container = document.getElementById('gallery-container');
-
-        let panX = 0, panY = 0, targetPanX = 0, targetPanY = 0;
-        let zoom = window.innerWidth < 768 ? 0.35 : 0.55;
-        let targetZoom = window.innerWidth < 768 ? 0.35 : 0.55;
-        let isDragging = false;
-        let startMX, startMY, startPX, startPY;
-
-        function applyTransform() {
-            track.style.transform = `translate(calc(-50% + ${panX}px), calc(-50% + ${panY}px)) scale(${zoom})`;
-        }
-        applyTransform();
-
-        (function tick() {
-            panX  += (targetPanX - panX)  * 0.1;
-            panY  += (targetPanY - panY)  * 0.1;
-            zoom  += (targetZoom - zoom)  * 0.1;
-            applyTransform();
-            requestAnimationFrame(tick);
-        })();
-
-        // Mouse drag
-        container.addEventListener('mousedown', e => {
-            isDragging = true;
-            startMX = e.clientX; startMY = e.clientY;
-            startPX = targetPanX; startPY = targetPanY;
-            container.style.cursor = 'grabbing';
-        });
-        window.addEventListener('mousemove', e => {
-            if (!isDragging) return;
-            targetPanX = startPX + (e.clientX - startMX);
-            targetPanY = startPY + (e.clientY - startMY);
-        });
-        window.addEventListener('mouseup', () => {
-            isDragging = false;
-            container.style.cursor = 'grab';
+        // --- GSAP Draggable + Inertia Engine ---
+        let currentZoom = window.innerWidth < 768 ? 0.38 : 0.58;
+        gsap.set(track, {
+            xPercent: -50,
+            yPercent: -50,
+            scale: currentZoom,
+            transformOrigin: "center center"
         });
 
-        // Touch drag
-        container.addEventListener('touchstart', e => {
-            isDragging = true;
-            startMX = e.touches[0].clientX; startMY = e.touches[0].clientY;
-            startPX = targetPanX; startPY = targetPanY;
-        }, { passive: true });
-        window.addEventListener('touchmove', e => {
-            if (!isDragging) return;
-            targetPanX = startPX + (e.touches[0].clientX - startMX);
-            targetPanY = startPY + (e.touches[0].clientY - startMY);
-        }, { passive: true });
-        window.addEventListener('touchend', () => { isDragging = false; });
-
-        // Zoom buttons only
-        document.getElementById('zoom-in').addEventListener('click', () => {
-            targetZoom = Math.min(2.0, targetZoom + 0.15);
-        });
-        document.getElementById('zoom-out').addEventListener('click', () => {
-            targetZoom = Math.max(0.25, targetZoom - 0.15);
+        const [galleryDraggable] = Draggable.create(track, {
+            type: "x,y",
+            edgeResistance: 0.8,
+            inertia: true,
+            bounds: {
+                minX: -1200,
+                maxX: 1200,
+                minY: -900,
+                maxY: 900
+            },
+            cursor: "grab",
+            activeCursor: "grabbing"
         });
 
-        // Pan clamping so you can't drag into infinity
-        const MAX_PAN = 1000;
-        setInterval(() => {
-            if (!isDragging) {
-                if (targetPanX >  MAX_PAN) targetPanX =  MAX_PAN;
-                if (targetPanX < -MAX_PAN) targetPanX = -MAX_PAN;
-                if (targetPanY >  MAX_PAN) targetPanY =  MAX_PAN;
-                if (targetPanY < -MAX_PAN) targetPanY = -MAX_PAN;
-            }
-        }, 200);
+
+
+        // Smooth GSAP zoom tweening
+        document.getElementById("zoom-in").addEventListener("click", () => {
+            currentZoom = Math.min(1.8, currentZoom + 0.15);
+            gsap.to(track, { scale: currentZoom, duration: 0.45, ease: "power2.out" });
+        });
+        document.getElementById("zoom-out").addEventListener("click", () => {
+            currentZoom = Math.max(0.25, currentZoom - 0.15);
+            gsap.to(track, { scale: currentZoom, duration: 0.45, ease: "power2.out" });
+        });
     })();
     </script>
+
+    <!-- Working Volumes (ThreeUI CompleteShelfLandingPage) -->
+    <section id="working-volumes" class="relative w-full min-h-screen bg-[#171a24] text-[#f4eee6] border-t-8 border-ink overflow-hidden flex flex-col z-20">
+        <!-- Section Header -->
+        <div class="px-8 md:px-24 pt-20 pb-8 flex flex-col md:flex-row md:items-end justify-between gap-6 z-20">
+            <div>
+                <p class="font-sans text-xs font-bold uppercase tracking-[0.2em] text-[#c87046] mb-3 flex items-center gap-3">
+                    <span class="w-8 h-[2px] bg-[#c87046] inline-block"></span> ThreeUI · Interactive 3D Architecture
+                </p>
+                <h2 class="text-4xl md:text-7xl font-display font-extrabold uppercase tracking-tight text-[#f4eee6]">
+                    Working Volumes
+                </h2>
+                <p class="text-cream/70 text-base md:text-xl max-w-2xl font-light mt-3">
+                    Seven tactile field guides for contemporary creative tools rendered with Three.js r165. Click, drag, inspect each book in 3D, and browse the interactive shelf.
+                </p>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="working-volumes.html" target="_blank" class="px-6 py-4 bg-[#c87046] text-[#ffffff] hover:bg-vermilion transition-all font-sans text-xs font-bold uppercase tracking-widest flex items-center gap-2 shadow-lg">
+                    Open Dedicated Page <span>↗</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- The Shader Frame Component (CompleteShelfLandingPage) -->
+        <div class="shader-frame relative w-full h-[78vh] md:h-[82vh] border-t border-b border-[#f4eee6]/15 bg-[#10131b]">
+            <div class="threeui-background landing-page-frame w-full h-full relative overflow-hidden" data-state="ready">
+                <iframe
+                    src="public/landing-pages/complete-shelf-v2.html"
+                    title="Working Volumes — Seven Tools for Making"
+                    loading="lazy"
+                    class="w-full h-full block border-0 bg-[#171a24]"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                ></iframe>
+            </div>
+        </div>
+    </section>
 
     <!-- Contact & Action Section -->
     <section id="contact" class="min-h-[80vh] flex flex-col justify-center items-center text-center px-8 bg-ochre/95 backdrop-blur-md text-ink border-t-8 border-ink">
@@ -554,27 +566,27 @@
         </div>
     </section>
 
-    <!-- Motion.dev inline module -->
-    <script type="module">
-        import { animate, scroll, inView, stagger } from "https://cdn.jsdelivr.net/npm/motion@11.11.13/+esm";
-        
-        // --- 1. Lenis Smooth Scroll ---
+    <!-- GSAP Master Animation Architecture -->
+    <script>
+        gsap.registerPlugin(ScrollTrigger, SplitText, Draggable, InertiaPlugin, TextPlugin);
+
+        // --- 1. Lenis Smooth Scroll + GSAP ScrollTrigger Synchronization ---
         const lenis = new Lenis({
             duration: 1.2,
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             smooth: true
         });
 
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
-        requestAnimationFrame(raf);
+        lenis.on("scroll", ScrollTrigger.update);
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
 
         // --- 2. Three.js Background (Dot Globe/Network + Constellations + Stars) ---
-        const canvas = document.getElementById('webgl-canvas');
+        const canvas = document.getElementById("webgl-canvas");
         const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0xF4F1EA, 0.0012); // Reduced fog to make it prominent
+        scene.fog = new THREE.FogExp2(0xF4F1EA, 0.0012);
 
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.z = 30;
@@ -590,7 +602,7 @@
         for(let i = 0; i < particlesCount * 3; i++) {
             posArray[i] = (Math.random() - 0.5) * 120;
         }
-        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        particlesGeometry.setAttribute("position", new THREE.BufferAttribute(posArray, 3));
         const material = new THREE.PointsMaterial({ size: 0.15, color: 0x1D3B55, transparent: true, opacity: 0.9 }); 
         const particlesMesh = new THREE.Points(particlesGeometry, material);
         scene.add(particlesMesh);
@@ -604,35 +616,35 @@
         // Moving Constellations (Lines)
         const constelGeo = new THREE.BufferGeometry();
         const constelPts = [];
-        for(let i=0; i<150; i++) {
+        for(let i = 0; i < 150; i++) {
             constelPts.push((Math.random()-0.5)*150, (Math.random()-0.5)*150, (Math.random()-0.5)*100);
         }
-        constelGeo.setAttribute('position', new THREE.Float32BufferAttribute(constelPts, 3));
+        constelGeo.setAttribute("position", new THREE.Float32BufferAttribute(constelPts, 3));
         const indices = [];
-        for(let i=0; i<150; i++) {
-            for(let j=i+1; j<150; j++) {
+        for(let i = 0; i < 150; i++) {
+            for(let j = i + 1; j < 150; j++) {
                 if(Math.random() > 0.96) indices.push(i, j);
             }
         }
         constelGeo.setIndex(indices);
-        const constelMat = new THREE.LineBasicMaterial({ color: 0xEBA834, transparent: true, opacity: 0.3 }); // Ochre lines
+        const constelMat = new THREE.LineBasicMaterial({ color: 0xEBA834, transparent: true, opacity: 0.3 });
         const constelMesh = new THREE.LineSegments(constelGeo, constelMat);
         scene.add(constelMesh);
 
         // Deep Background Stars
         const starGeo = new THREE.BufferGeometry();
         const starPts = [];
-        for(let i=0; i<400; i++) {
+        for(let i = 0; i < 400; i++) {
             starPts.push((Math.random()-0.5)*250, (Math.random()-0.5)*250, (Math.random()-0.5)*200 - 50);
         }
-        starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starPts, 3));
+        starGeo.setAttribute("position", new THREE.Float32BufferAttribute(starPts, 3));
         const starMat = new THREE.PointsMaterial({ size: 0.25, color: 0xD83121, transparent: true, opacity: 0.8 });
         const starMesh = new THREE.Points(starGeo, starMat);
         scene.add(starMesh);
 
         let mouseX = 0;
         let mouseY = 0;
-        document.addEventListener('mousemove', (e) => {
+        document.addEventListener("mousemove", (e) => {
             mouseX = e.clientX - window.innerWidth / 2;
             mouseY = e.clientY - window.innerHeight / 2;
         });
@@ -663,128 +675,254 @@
         }
         animateThree();
 
-        window.addEventListener('resize', () => {
+        window.addEventListener("resize", () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // --- 3. Custom Cursor ---
-        const cursor = document.getElementById('cursor');
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.transform = `translate3d(${e.clientX - 4}px, ${e.clientY - 4}px, 0)`;
+        // --- 3. Zero-Latency Precision Cursor via GSAP quickTo ---
+        const cursor = document.getElementById("cursor");
+        if (cursor) {
+            const setCursorX = gsap.quickTo(cursor, "x", { duration: 0.18, ease: "power3" });
+            const setCursorY = gsap.quickTo(cursor, "y", { duration: 0.18, ease: "power3" });
+
+            window.addEventListener("mousemove", (e) => {
+                setCursorX(e.clientX - 4);
+                setCursorY(e.clientY - 4);
+            });
+        }
+
+        // --- 4. Hero Section Kinetic Editorial Reveal (SplitText + Timeline) ---
+        const initHeroAnimations = () => {
+            const heroTitle = document.querySelector(".hero-title-text");
+            if (!heroTitle) return;
+
+            // Split title by lines and characters
+            const splitTitle = new SplitText(heroTitle, {
+                type: "lines,chars",
+                linesClass: "overflow-hidden"
+            });
+
+            const heroTL = gsap.timeline({ defaults: { ease: "power4.out" } });
+
+            heroTL
+                .from(".hero-content > p", {
+                    opacity: 0,
+                    x: -40,
+                    duration: 0.9,
+                    ease: "power3.out"
+                }, 0.1)
+                .from(splitTitle.chars, {
+                    yPercent: 125,
+                    rotateX: 40,
+                    opacity: 0,
+                    stagger: 0.02,
+                    duration: 1.1,
+                    transformOrigin: "0% 50% -40"
+                }, 0.2)
+                .from(".hero-desc", {
+                    opacity: 0,
+                    y: 35,
+                    duration: 0.9,
+                    ease: "power3.out"
+                }, 0.6)
+                .from(".hero-content .z-50 a", {
+                    opacity: 0,
+                    y: 25,
+                    stagger: 0.12,
+                    duration: 0.75,
+                    ease: "back.out(1.7)"
+                }, 0.8)
+                .from(".hero-bg-panel", {
+                    scaleX: 0,
+                    transformOrigin: "right center",
+                    duration: 1.4,
+                    ease: "expo.out"
+                }, 0.2);
+
+            // Interactive kinetic character bounce on hover
+            const hoverColors = ["#D83121", "#EBA834", "#1D3B55"];
+            splitTitle.chars.forEach((char) => {
+                char.style.display = "inline-block";
+                char.addEventListener("mouseenter", () => {
+                    const randomColor = hoverColors[Math.floor(Math.random() * hoverColors.length)];
+                    gsap.to(char, {
+                        color: randomColor,
+                        y: -10,
+                        scale: 1.1,
+                        duration: 0.15,
+                        ease: "power2.out"
+                    });
+                });
+                char.addEventListener("mouseleave", () => {
+                    gsap.to(char, {
+                        color: "#1A1C20",
+                        y: 0,
+                        scale: 1,
+                        duration: 0.7,
+                        ease: "elastic.out(1, 0.4)"
+                    });
+                });
+            });
+        };
+
+        if (document.fonts) {
+            document.fonts.ready.then(initHeroAnimations);
+        } else {
+            window.addEventListener("load", initHeroAnimations);
+        }
+
+        // --- 5. Executive Summary Reveal ---
+        gsap.from("#exec-summary .border-l-2", {
+            scrollTrigger: {
+                trigger: "#exec-summary",
+                start: "top 80%",
+                toggleActions: "play none none reverse"
+            },
+            opacity: 0,
+            y: 40,
+            stagger: 0.15,
+            duration: 0.9,
+            ease: "power3.out"
         });
-        
-        // --- 4. Motion.dev Animations ---
-        animate(".hero-title", { y: [100, 0], opacity: [0, 1] }, { duration: 1.2, easing: [0.22, 1, 0.36, 1] });
-        animate(".hero-desc", { y: [50, 0], opacity: [0, 1] }, { duration: 1, delay: 0.4, easing: "ease-out" });
-        animate(".hero-buttons a", { y: [30, 0], opacity: [0, 1] }, { duration: 0.8, delay: stagger(0.1, { start: 0.6 }) });
-        animate(".hero-bg-panel", { scaleX: [0, 1] }, { duration: 1.5, easing: [0.22, 1, 0.36, 1] });
-        
-        inView("#about", () => {
-            animate("#about .section-title", { opacity: [0, 1], y: [40, 0] }, { duration: 0.8, easing: "ease-out" });
-            animate(".skill-card", { opacity: [0, 1], y: [40, 0] }, { duration: 0.8, delay: stagger(0.1, { start: 0.2 }), easing: "ease-out" });
-        }, { margin: "-20% 0px" });
-        
+
+        // --- 6. The Skillset (#about) Staggered Reveal ---
+        gsap.from("#about .section-title", {
+            scrollTrigger: {
+                trigger: "#about",
+                start: "top 80%"
+            },
+            opacity: 0,
+            y: 50,
+            duration: 0.9,
+            ease: "power3.out"
+        });
+
+        gsap.from(".skill-card", {
+            scrollTrigger: {
+                trigger: "#about",
+                start: "top 70%"
+            },
+            opacity: 0,
+            y: 45,
+            stagger: 0.08,
+            duration: 0.8,
+            ease: "power2.out"
+        });
+
+        // --- 7. Experience Section Progress Line & Rows ---
         const scrollProgressLine = document.getElementById("scroll-progress-line");
         const experienceSection = document.getElementById("experience");
-        if(scrollProgressLine && experienceSection) {
-            scroll(
-                animate(scrollProgressLine, { scaleY: [0, 1] }),
-                { target: experienceSection, offset: ["start center", "end center"] }
-            );
+        if (scrollProgressLine && experienceSection) {
+            gsap.to(scrollProgressLine, {
+                scaleY: 1,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: experienceSection,
+                    start: "top 70%",
+                    end: "bottom 70%",
+                    scrub: true
+                }
+            });
         }
-        
-        const experienceRows = document.querySelectorAll(".experience-row");
-        experienceRows.forEach((row) => {
-            row.style.opacity = "0";
-            row.style.transform = "translateX(-30px)";
-            inView(row, () => {
-                animate(row, { opacity: [0, 1], x: [-30, 0] }, { duration: 0.8, easing: "ease-out" });
-            }, { margin: "-10% 0px" });
+
+        gsap.utils.toArray(".experience-row").forEach((row) => {
+            gsap.from(row, {
+                scrollTrigger: {
+                    trigger: row,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse"
+                },
+                x: -40,
+                opacity: 0,
+                duration: 0.85,
+                ease: "power3.out"
+            });
         });
-        
+
+        // --- 8. Achievements Horizontal Track with ScrollTrigger MatchMedia ---
         const achievementsSection = document.getElementById("achievements");
         const horizontalTrack = document.getElementById("horizontal-track");
         const horizontalProgress = document.getElementById("horizontal-progress");
-        let currentScroll = null;
-        let currentProgress = null;
 
         if (achievementsSection && horizontalTrack) {
-            const updateScroll = () => {
-                if (window.innerWidth < 768) {
-                    // Mobile: natural vertical stack, disable motion.dev scroll
-                    if(currentScroll) currentScroll(); // cancel previous if any (motion.dev scroll returns cancel fn)
-                    if(currentProgress) currentProgress();
-                    horizontalTrack.style.transform = "none";
-                    return;
-                }
+            ScrollTrigger.matchMedia({
+                "(min-width: 768px)": function() {
+                    const scrollDistance = () => horizontalTrack.scrollWidth - window.innerWidth + 200;
 
-                // Desktop: horizontal pin scroll
-                const scrollDistance = horizontalTrack.scrollWidth - window.innerWidth + 200;
-                currentScroll = scroll(
-                    animate(horizontalTrack, { x: ["0px", `-${scrollDistance}px`] }),
-                    { target: achievementsSection, offset: ["start start", "end end"] }
-                );
-                if (horizontalProgress) {
-                    currentProgress = scroll(
-                        animate(horizontalProgress, { scaleX: [0, 1] }),
-                        { target: achievementsSection, offset: ["start start", "end end"] }
-                    );
+                    gsap.to(horizontalTrack, {
+                        x: () => -scrollDistance(),
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: achievementsSection,
+                            start: "top top",
+                            end: () => "+=" + scrollDistance(),
+                            pin: true,
+                            scrub: 1,
+                            invalidateOnRefresh: true,
+                            onUpdate: (self) => {
+                                if (horizontalProgress) {
+                                    gsap.set(horizontalProgress, { scaleX: self.progress });
+                                }
+                            }
+                        }
+                    });
+                },
+                "(max-width: 767px)": function() {
+                    gsap.set(horizontalTrack, { x: 0 });
                 }
-            };
-            setTimeout(updateScroll, 100);
-            window.addEventListener('resize', updateScroll);
-        }
-    </script>
-    <script>
-        // --- 5. Interactive Letter Hover Effect ---
-        const initLetterHover = () => {
-            const title = document.querySelector('.hero-title-text');
-            if(!title) return;
-            const text = title.innerHTML.trim(); // get innerHTML to read the <br/>
-            title.innerHTML = '';
-            
-            const colors = ['#D83121', '#EBA834', '#1D3B55']; // vermilion, ochre, prussian
-            
-            // split by <br/> then split by char
-            const lines = text.split(/<br\s*\/?>/i);
-            
-            lines.forEach((line, index) => {
-                const lineDiv = document.createElement('div');
-                
-                line.trim().split('').forEach(char => {
-                    if(char === ' ') {
-                        lineDiv.appendChild(document.createTextNode(' '));
-                    } else {
-                        const span = document.createElement('span');
-                        span.textContent = char;
-                        // Add smooth transition for color
-                        span.className = 'transition-colors duration-500 ease-out inline-block';
-                        
-                        const triggerColor = () => {
-                            const randomColor = colors[Math.floor(Math.random() * colors.length)];
-                            span.style.color = randomColor;
-                            span.style.transitionDuration = '0s'; // instant color change
-                        };
-                        const resetColor = () => {
-                            span.style.transitionDuration = '1s'; // slow fade back
-                            span.style.color = '';
-                        };
-
-                        span.addEventListener('mouseenter', triggerColor);
-                        span.addEventListener('touchstart', triggerColor, { passive: true });
-                        
-                        span.addEventListener('mouseleave', resetColor);
-                        span.addEventListener('touchend', resetColor, { passive: true });
-                        
-                        lineDiv.appendChild(span);
-                    }
-                });
-                title.appendChild(lineDiv);
             });
-        };
-        document.fonts.ready.then(initLetterHover);
+        }
+
+        // --- 9. Working Volumes Showcase Reveal ---
+        gsap.from("#working-volumes .shader-frame", {
+            scrollTrigger: {
+                trigger: "#working-volumes",
+                start: "top 75%",
+                toggleActions: "play none none reverse"
+            },
+            opacity: 0,
+            y: 40,
+            duration: 1,
+            ease: "power3.out"
+        });
+
+        // --- 10. Contact Section Reveal ---
+        gsap.from(".contact-title", {
+            scrollTrigger: {
+                trigger: "#contact",
+                start: "top 80%"
+            },
+            opacity: 0,
+            y: 60,
+            duration: 1,
+            ease: "power4.out"
+        });
+
+        gsap.from(".contact-desc", {
+            scrollTrigger: {
+                trigger: "#contact",
+                start: "top 75%"
+            },
+            opacity: 0,
+            y: 30,
+            duration: 0.9,
+            delay: 0.15,
+            ease: "power3.out"
+        });
+
+        gsap.from("#contact a", {
+            scrollTrigger: {
+                trigger: "#contact",
+                start: "top 70%"
+            },
+            opacity: 0,
+            y: 20,
+            stagger: 0.1,
+            duration: 0.8,
+            ease: "back.out(1.7)"
+        });
     </script>
     <script>
         // --- 6. Fractal Topography Background ---
@@ -872,6 +1010,15 @@
             animateTopo();
         };
         initTopography();
+    </script>
+
+    <!-- 21st.dev 그라데이션 Ribbon Field Gradient -->
+    <script src="gradation.js"></script>
+    <script>
+        const heroGradCanvas = document.getElementById('hero-gradation-canvas');
+        if (heroGradCanvas && window.GradationRibbon) {
+            GradationRibbon.init(heroGradCanvas, { amt: 0.1 });
+        }
     </script>
 
 </body>
