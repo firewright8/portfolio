@@ -58,7 +58,6 @@
             <a href="#about" class="hover:text-vermilion transition-colors">Manifesto</a>
             <a href="#experience" class="hover:text-vermilion transition-colors">Experience</a>
             <a href="#achievements" class="hover:text-vermilion transition-colors">Achievements</a>
-            <a href="#working-volumes" class="hover:text-vermilion transition-colors">Working Volumes</a>
             <a href="#contact" class="hover:text-vermilion transition-colors">Contact</a>
         </div>
     </nav>
@@ -503,41 +502,6 @@
     })();
     </script>
 
-    <!-- Working Volumes (ThreeUI CompleteShelfLandingPage) -->
-    <section id="working-volumes" class="relative w-full min-h-screen bg-[#171a24] text-[#f4eee6] border-t-8 border-ink overflow-hidden flex flex-col z-20">
-        <!-- Section Header -->
-        <div class="px-8 md:px-24 pt-20 pb-8 flex flex-col md:flex-row md:items-end justify-between gap-6 z-20">
-            <div>
-                <p class="font-sans text-xs font-bold uppercase tracking-[0.2em] text-[#c87046] mb-3 flex items-center gap-3">
-                    <span class="w-8 h-[2px] bg-[#c87046] inline-block"></span> ThreeUI · Interactive 3D Architecture
-                </p>
-                <h2 class="text-4xl md:text-7xl font-display font-extrabold uppercase tracking-tight text-[#f4eee6]">
-                    Working Volumes
-                </h2>
-                <p class="text-cream/70 text-base md:text-xl max-w-2xl font-light mt-3">
-                    Seven tactile field guides for contemporary creative tools rendered with Three.js r165. Click, drag, inspect each book in 3D, and browse the interactive shelf.
-                </p>
-            </div>
-            <div class="flex items-center gap-4">
-                <a href="working-volumes.html" target="_blank" class="px-6 py-4 bg-[#c87046] text-[#ffffff] hover:bg-vermilion transition-all font-sans text-xs font-bold uppercase tracking-widest flex items-center gap-2 shadow-lg">
-                    Open Dedicated Page <span>↗</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- The Shader Frame Component (CompleteShelfLandingPage) -->
-        <div class="shader-frame relative w-full h-[78vh] md:h-[82vh] border-t border-b border-[#f4eee6]/15 bg-[#10131b]">
-            <div class="threeui-background landing-page-frame w-full h-full relative overflow-hidden" data-state="ready">
-                <iframe
-                    src="public/landing-pages/complete-shelf-v2.html"
-                    title="Working Volumes — Seven Tools for Making"
-                    loading="lazy"
-                    class="w-full h-full block border-0 bg-[#171a24]"
-                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                ></iframe>
-            </div>
-        </div>
-    </section>
 
     <!-- Contact & Action Section -->
     <section id="contact" class="min-h-[80vh] flex flex-col justify-center items-center text-center px-8 bg-ochre/95 backdrop-blur-md text-ink border-t-8 border-ink">
@@ -875,20 +839,7 @@
             });
         }
 
-        // --- 9. Working Volumes Showcase Reveal ---
-        gsap.from("#working-volumes .shader-frame", {
-            scrollTrigger: {
-                trigger: "#working-volumes",
-                start: "top 75%",
-                toggleActions: "play none none reverse"
-            },
-            opacity: 0,
-            y: 40,
-            duration: 1,
-            ease: "power3.out"
-        });
-
-        // --- 10. Contact Section Reveal ---
+        // --- 9. Contact Section Reveal ---
         gsap.from(".contact-title", {
             scrollTrigger: {
                 trigger: "#contact",
